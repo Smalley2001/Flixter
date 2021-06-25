@@ -1,5 +1,7 @@
 package com.example.flixter;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -46,9 +48,23 @@ public class MovieDetailsActivity extends AppCompatActivity {
         // set the title and overview
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
-        Glide.with(this).load(movie.getBackdropPath())
-        //.centerCrop().transform(new RoundedCornersTransformation(radius,margin))
-                .into(poster_image);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+            Glide.with(this).load(movie.getPosterPath()).placeholder(R.drawable.flicks_movie_placeholder)
+                    //.centerCrop().transform(new RoundedCornersTransformation(radius,margin))
+                    .into(poster_image);
+
+        } else {
+
+            Glide.with(this).load(movie.getBackdropPath()).placeholder(R.drawable.flicks_backdrop_placeholder)
+                    .centerCrop().transform(new RoundedCornersTransformation(radius,margin))
+                    .into(poster_image);
+        }
+
+//        Glide.with(this).load(movie.getPosterPath())
+//                //.centerCrop().transform(new RoundedCornersTransformation(radius,margin))
+//                .into(poster_image);
 
         // vote average is 0..10, convert to 0..5 by dividing by 2
         float voteAverage = movie.getVoteAverage().floatValue();
